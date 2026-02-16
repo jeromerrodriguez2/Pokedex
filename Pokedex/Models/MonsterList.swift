@@ -5,6 +5,8 @@
 //  Created by Jerome Rodriguez on 10/2/2026.
 //
 
+import Foundation
+
 struct MonsterList: Decodable {
     let count: Int
     let next: String?
@@ -12,7 +14,8 @@ struct MonsterList: Decodable {
     let results: [MonsterListItem]
 }
 
-struct MonsterListItem: Decodable {
+struct MonsterListItem: Decodable, Identifiable {
+    let id = UUID()
     let name: String
     let url: String
 }
