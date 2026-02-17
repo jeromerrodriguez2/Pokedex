@@ -17,7 +17,7 @@ struct Home: View {
         NavigationStack {
             VStack {
                 List {
-                    ForEach(Array(searchResult.enumerated()), id: \.element.id) { index, pokemon in
+                    ForEach(Array(searchResult.enumerated()), id: \.element.name) { index, pokemon in
                         NavigationLink(destination: {
                             PokemonView(
                                 viewModel: .init(pokemonNumber: (viewModel.displayedPokemonList.firstIndex { $0.name == pokemon.name } ?? 0) + 1))

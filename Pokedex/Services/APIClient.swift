@@ -14,11 +14,12 @@ final class APIClient {
     private init() {}
     
     func get(endpoint: String) async throws -> Data {
-        let url = URL(string: baseURL + endpoint)!
+        // TODO: Introduce proper error when URL initialisation returns nil
         
+        let url = URL(string: baseURL + endpoint)!
+
         let (data, response) = try await URLSession.shared.data(from: url)
         let httpResponse = response as? HTTPURLResponse
-        print(httpResponse?.statusCode ?? "Boo")
         
         return data
     }

@@ -14,8 +14,7 @@ struct MonsterList: Decodable {
     let results: [MonsterListItem]
 }
 
-struct MonsterListItem: Decodable, Identifiable {
-    let id = UUID()
+struct MonsterListItem: Decodable {
     let name: String
     let url: String
 }

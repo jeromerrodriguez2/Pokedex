@@ -11,21 +11,20 @@ final class PokemonViewModel: ObservableObject {
     @Published var pokemon: Pokemon?
     @Published var imageURL: URL?
     private let pokemonNumber: Int
+    private let service: PokemonServiceProtocol
 
-    init(pokemonNumber: Int) {
+    init(pokemonNumber: Int, service: PokemonServiceProtocol = PokemonService()) {
         self.pokemonNumber = pokemonNumber
+        self.service = service
     }
-    
+        
     @MainActor
     func getPokemon() async {
-        let endpoint = "/pokemon/\(pokemonNumber)"
-        print("Pokemon number is \(pokemonNumber)")
         
         do {
-            let data = try await APIClient.shared.get(endpoint: endpoint)
-            pokemon = try JSONDecoder().decode(Pokemon.self, from: data)
-            if let frontDefault = pokemon?.sprites.other.officialArtwork.frontDefault {
-                imageURL = URL(string: frontDefault)
+            pokemon = try await service.fetchPokemon(with: pokemonNumber)
+            if let defaultImageURL = pokemon?.sprites.other.officialArtwork.frontDefault {
+                imageURL = URL(string: defaultImageURL)
             }
             
         } catch {
