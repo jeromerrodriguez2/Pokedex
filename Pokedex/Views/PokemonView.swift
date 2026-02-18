@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PokemonView: View {
     @ObservedObject var viewModel: PokemonViewModel
+    @State private var isAlertPresented = false
     
     init(viewModel: PokemonViewModel) {
         self.viewModel = viewModel
@@ -99,5 +100,11 @@ struct PokemonView: View {
                 await viewModel.getPokemon()
             }
         }
+        .onChange(of: viewModel.errorMessage) {
+            isAlertPresented = true
+        }
+        .alert("Something went wrong", isPresented: $isAlertPresented, actions: {}, message: {
+            Text(viewModel.errorMessage)
+        })
     }
 }

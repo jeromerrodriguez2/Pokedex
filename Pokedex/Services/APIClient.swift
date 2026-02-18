@@ -18,8 +18,7 @@ final class APIClient {
         
         let url = URL(string: baseURL + endpoint)!
 
-        let (data, response) = try await URLSession.shared.data(from: url)
-        let httpResponse = response as? HTTPURLResponse
+        let (data, _) = try await URLSession.shared.data(from: url)
         
         return data
     }

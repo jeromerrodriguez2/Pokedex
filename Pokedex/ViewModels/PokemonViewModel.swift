@@ -10,6 +10,8 @@ import Foundation
 final class PokemonViewModel: ObservableObject {
     @Published var pokemon: Pokemon?
     @Published var imageURL: URL?
+    @Published var errorMessage = ""
+
     private let pokemonNumber: Int
     private let service: PokemonServiceProtocol
 
@@ -28,7 +30,18 @@ final class PokemonViewModel: ObservableObject {
             }
             
         } catch {
-            print("Pokemon get failed")
+            if let customError = error as? CustomError {
+                errorMessage = switch customError {
+                case .networkError:
+                    "Network error occured. Please try again."
+                case .decodingError:
+                    "Decoding error. Please contact app owner"
+                case .unknownError:
+                    "Unknown error. Please contact app owner"
+                }
+            } else {
+                errorMessage = "Unknown error. Please contact app owner"
+            }
         }
     }
 }

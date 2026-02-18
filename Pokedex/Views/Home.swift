@@ -12,6 +12,7 @@ struct Home: View {
     @State private var searchString = ""
     @State private var isLoading = false
     @State private var activeTask: Task<Void, Never>?
+    @State private var isAlertPresented = false
     
     var body: some View {
         NavigationStack {
@@ -48,6 +49,12 @@ struct Home: View {
                 await viewModel.fetchPokemonList()
             }
         }
+        .onChange(of: viewModel.errorMessage) {
+            isAlertPresented = true
+        }
+        .alert("Something went wrong", isPresented: $isAlertPresented, actions: {}, message: {
+            Text(viewModel.errorMessage)
+        })
         
         var searchResult: [MonsterListItem] {
             if searchString.isEmpty {

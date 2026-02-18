@@ -33,7 +33,7 @@ struct CachedAsyncImage<Content: View, Placeholder: View>: View {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case let .success(image):
-                        // TODO: Remove this from code, so there's no side-effect for success state in the view
+                        // TODO: Remove this from View, so there's no side-effect for success state in the view
                         saveToCache(from: url)
                         return AnyView(content(image))
                     case .failure, .empty:

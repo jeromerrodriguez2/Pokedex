@@ -9,6 +9,8 @@ import Foundation
 
 final class HomeViewModel: ObservableObject {
     @Published var displayedPokemonList: [MonsterListItem] = []
+    @Published var errorMessage = ""
+    
     private var requestCount = 0
     private let service: PokemonServiceProtocol
     
@@ -16,14 +18,25 @@ final class HomeViewModel: ObservableObject {
         self.service = service
     }
 
+    
     @MainActor
     func fetchPokemonList() async {
         do {
             let pokemonList = try await service.fetchPokemonList(requestCount: requestCount, requestLimit: 20)
             displayedPokemonList = displayedPokemonList + pokemonList.results
         } catch {
-            // Return a meaningful error message here like a specific enum that we can display to the user
-            print("Get method failed")
+            if let customError = error as? CustomError {
+                errorMessage = switch customError {
+                case .networkError:
+                    "Network error occured. Please try again."
+                case .decodingError:
+                    "Decoding error. Please contact app owner"
+                case .unknownError:
+                    "Unknown error. Please contact app owner"
+                }
+            } else {
+                errorMessage = "Unknown error. Please contact app owner"
+            }
         }
         requestCount += 1
     }
