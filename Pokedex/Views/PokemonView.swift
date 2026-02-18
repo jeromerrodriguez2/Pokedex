@@ -19,25 +19,15 @@ struct PokemonView: View {
             VStack(alignment: .leading) {
                 VStack {
                     if let imageURL = viewModel.imageURL {
-                        AsyncImage(url: imageURL) { phase in
-                            switch phase {
-                            case .empty:
-                                ProgressView()
-                            case .success(let image):
+                        CachedAsyncImage(
+                            url: imageURL,
+                            content: { image in
                                 image
                                     .resizable()
                                     .scaledToFit()
-                            case .failure:
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .scaledToFit()
-                            default:
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .scaledToFit()
-                                
-                            }
-                        }
+                            }, placeholder: {
+                                ProgressView()
+                            })
                     }
                     
                     if let pokemon = viewModel.pokemon {
